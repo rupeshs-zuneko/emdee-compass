@@ -9,38 +9,185 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppVisitsIndexRouteImport } from './routes/_app.visits.index'
+import { Route as AppOpportunitiesIndexRouteImport } from './routes/_app.opportunities.index'
+import { Route as AppVisitsNewRouteImport } from './routes/_app.visits.new'
+import { Route as AppVisitsIdRouteImport } from './routes/_app.visits.$id'
+import { Route as AppOpportunitiesNewRouteImport } from './routes/_app.opportunities.new'
+import { Route as AppOpportunitiesIdRouteImport } from './routes/_app.opportunities.$id'
+import { Route as AppVisitsIdEditRouteImport } from './routes/_app.visits.$id.edit'
+import { Route as AppOpportunitiesIdEditRouteImport } from './routes/_app.opportunities.$id.edit'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVisitsIndexRoute = AppVisitsIndexRouteImport.update({
+  id: '/visits/',
+  path: '/visits/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOpportunitiesIndexRoute = AppOpportunitiesIndexRouteImport.update({
+  id: '/opportunities/',
+  path: '/opportunities/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVisitsNewRoute = AppVisitsNewRouteImport.update({
+  id: '/visits/new',
+  path: '/visits/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVisitsIdRoute = AppVisitsIdRouteImport.update({
+  id: '/visits/$id',
+  path: '/visits/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOpportunitiesNewRoute = AppOpportunitiesNewRouteImport.update({
+  id: '/opportunities/new',
+  path: '/opportunities/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOpportunitiesIdRoute = AppOpportunitiesIdRouteImport.update({
+  id: '/opportunities/$id',
+  path: '/opportunities/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVisitsIdEditRoute = AppVisitsIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AppVisitsIdRoute,
+} as any)
+const AppOpportunitiesIdEditRoute = AppOpportunitiesIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AppOpportunitiesIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof AppProfileRoute
+  '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
+  '/opportunities/new': typeof AppOpportunitiesNewRoute
+  '/visits/$id': typeof AppVisitsIdRouteWithChildren
+  '/visits/new': typeof AppVisitsNewRoute
+  '/opportunities/': typeof AppOpportunitiesIndexRoute
+  '/visits/': typeof AppVisitsIndexRoute
+  '/opportunities/$id/edit': typeof AppOpportunitiesIdEditRoute
+  '/visits/$id/edit': typeof AppVisitsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof AppProfileRoute
+  '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
+  '/opportunities/new': typeof AppOpportunitiesNewRoute
+  '/visits/$id': typeof AppVisitsIdRouteWithChildren
+  '/visits/new': typeof AppVisitsNewRoute
+  '/opportunities': typeof AppOpportunitiesIndexRoute
+  '/visits': typeof AppVisitsIndexRoute
+  '/opportunities/$id/edit': typeof AppOpportunitiesIdEditRoute
+  '/visits/$id/edit': typeof AppVisitsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_app/profile': typeof AppProfileRoute
+  '/_app/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
+  '/_app/opportunities/new': typeof AppOpportunitiesNewRoute
+  '/_app/visits/$id': typeof AppVisitsIdRouteWithChildren
+  '/_app/visits/new': typeof AppVisitsNewRoute
+  '/_app/opportunities/': typeof AppOpportunitiesIndexRoute
+  '/_app/visits/': typeof AppVisitsIndexRoute
+  '/_app/opportunities/$id/edit': typeof AppOpportunitiesIdEditRoute
+  '/_app/visits/$id/edit': typeof AppVisitsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/profile'
+    | '/opportunities/$id'
+    | '/opportunities/new'
+    | '/visits/$id'
+    | '/visits/new'
+    | '/opportunities/'
+    | '/visits/'
+    | '/opportunities/$id/edit'
+    | '/visits/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/profile'
+    | '/opportunities/$id'
+    | '/opportunities/new'
+    | '/visits/$id'
+    | '/visits/new'
+    | '/opportunities'
+    | '/visits'
+    | '/opportunities/$id/edit'
+    | '/visits/$id/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/login'
+    | '/_app/profile'
+    | '/_app/opportunities/$id'
+    | '/_app/opportunities/new'
+    | '/_app/visits/$id'
+    | '/_app/visits/new'
+    | '/_app/opportunities/'
+    | '/_app/visits/'
+    | '/_app/opportunities/$id/edit'
+    | '/_app/visits/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +195,121 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/visits/': {
+      id: '/_app/visits/'
+      path: '/visits'
+      fullPath: '/visits/'
+      preLoaderRoute: typeof AppVisitsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/opportunities/': {
+      id: '/_app/opportunities/'
+      path: '/opportunities'
+      fullPath: '/opportunities/'
+      preLoaderRoute: typeof AppOpportunitiesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/visits/new': {
+      id: '/_app/visits/new'
+      path: '/visits/new'
+      fullPath: '/visits/new'
+      preLoaderRoute: typeof AppVisitsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/visits/$id': {
+      id: '/_app/visits/$id'
+      path: '/visits/$id'
+      fullPath: '/visits/$id'
+      preLoaderRoute: typeof AppVisitsIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/opportunities/new': {
+      id: '/_app/opportunities/new'
+      path: '/opportunities/new'
+      fullPath: '/opportunities/new'
+      preLoaderRoute: typeof AppOpportunitiesNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/opportunities/$id': {
+      id: '/_app/opportunities/$id'
+      path: '/opportunities/$id'
+      fullPath: '/opportunities/$id'
+      preLoaderRoute: typeof AppOpportunitiesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/visits/$id/edit': {
+      id: '/_app/visits/$id/edit'
+      path: '/edit'
+      fullPath: '/visits/$id/edit'
+      preLoaderRoute: typeof AppVisitsIdEditRouteImport
+      parentRoute: typeof AppVisitsIdRoute
+    }
+    '/_app/opportunities/$id/edit': {
+      id: '/_app/opportunities/$id/edit'
+      path: '/edit'
+      fullPath: '/opportunities/$id/edit'
+      preLoaderRoute: typeof AppOpportunitiesIdEditRouteImport
+      parentRoute: typeof AppOpportunitiesIdRoute
+    }
   }
 }
 
+interface AppOpportunitiesIdRouteChildren {
+  AppOpportunitiesIdEditRoute: typeof AppOpportunitiesIdEditRoute
+}
+
+const AppOpportunitiesIdRouteChildren: AppOpportunitiesIdRouteChildren = {
+  AppOpportunitiesIdEditRoute: AppOpportunitiesIdEditRoute,
+}
+
+const AppOpportunitiesIdRouteWithChildren =
+  AppOpportunitiesIdRoute._addFileChildren(AppOpportunitiesIdRouteChildren)
+
+interface AppVisitsIdRouteChildren {
+  AppVisitsIdEditRoute: typeof AppVisitsIdEditRoute
+}
+
+const AppVisitsIdRouteChildren: AppVisitsIdRouteChildren = {
+  AppVisitsIdEditRoute: AppVisitsIdEditRoute,
+}
+
+const AppVisitsIdRouteWithChildren = AppVisitsIdRoute._addFileChildren(
+  AppVisitsIdRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppProfileRoute: typeof AppProfileRoute
+  AppOpportunitiesIdRoute: typeof AppOpportunitiesIdRouteWithChildren
+  AppOpportunitiesNewRoute: typeof AppOpportunitiesNewRoute
+  AppVisitsIdRoute: typeof AppVisitsIdRouteWithChildren
+  AppVisitsNewRoute: typeof AppVisitsNewRoute
+  AppOpportunitiesIndexRoute: typeof AppOpportunitiesIndexRoute
+  AppVisitsIndexRoute: typeof AppVisitsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppProfileRoute: AppProfileRoute,
+  AppOpportunitiesIdRoute: AppOpportunitiesIdRouteWithChildren,
+  AppOpportunitiesNewRoute: AppOpportunitiesNewRoute,
+  AppVisitsIdRoute: AppVisitsIdRouteWithChildren,
+  AppVisitsNewRoute: AppVisitsNewRoute,
+  AppOpportunitiesIndexRoute: AppOpportunitiesIndexRoute,
+  AppVisitsIndexRoute: AppVisitsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
