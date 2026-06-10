@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppVisitsIndexRouteImport } from './routes/_app.visits.index'
 import { Route as AppSolutionsIndexRouteImport } from './routes/_app.solutions.index'
 import { Route as AppOpportunitiesIndexRouteImport } from './routes/_app.opportunities.index'
@@ -41,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHomeRoute = AppHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => AppRoute,
 } as any)
 const AppVisitsIndexRoute = AppVisitsIndexRouteImport.update({
@@ -97,6 +103,7 @@ const AppOpportunitiesIdEditRoute = AppOpportunitiesIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/home': typeof AppHomeRoute
   '/profile': typeof AppProfileRoute
   '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/opportunities/new': typeof AppOpportunitiesNewRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/home': typeof AppHomeRoute
   '/profile': typeof AppProfileRoute
   '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/opportunities/new': typeof AppOpportunitiesNewRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/_app/home': typeof AppHomeRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/_app/opportunities/new': typeof AppOpportunitiesNewRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/home'
     | '/profile'
     | '/opportunities/$id'
     | '/opportunities/new'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/home'
     | '/profile'
     | '/opportunities/$id'
     | '/opportunities/new'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/login'
+    | '/_app/home'
     | '/_app/profile'
     | '/_app/opportunities/$id'
     | '/_app/opportunities/new'
@@ -224,6 +236,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/visits/': {
@@ -323,6 +342,7 @@ const AppVisitsIdRouteWithChildren = AppVisitsIdRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppHomeRoute: typeof AppHomeRoute
   AppProfileRoute: typeof AppProfileRoute
   AppOpportunitiesIdRoute: typeof AppOpportunitiesIdRouteWithChildren
   AppOpportunitiesNewRoute: typeof AppOpportunitiesNewRoute
@@ -335,6 +355,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppHomeRoute: AppHomeRoute,
   AppProfileRoute: AppProfileRoute,
   AppOpportunitiesIdRoute: AppOpportunitiesIdRouteWithChildren,
   AppOpportunitiesNewRoute: AppOpportunitiesNewRoute,

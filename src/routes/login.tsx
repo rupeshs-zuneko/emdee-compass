@@ -29,7 +29,7 @@ function LoginScreen() {
       setError(res.error || "Login failed.");
       return;
     }
-    navigate({ to: "/opportunities" });
+    navigate({ to: "/home" });
   }
 
   return (
