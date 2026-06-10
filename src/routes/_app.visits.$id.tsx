@@ -19,6 +19,7 @@ function VisitDetail() {
   const visit = getVisit(id);
   if (!visit) throw notFound();
   const opp = visit.opportunityId ? getOpportunity(visit.opportunityId) : null;
+  const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
     <>
