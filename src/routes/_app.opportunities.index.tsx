@@ -5,7 +5,8 @@ import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, Chip, FAB, Skeleton } from "@/components/mobile/primitives";
 import { StageBadge, TemperatureBadge } from "@/components/mobile/badges";
-import { EmptyState, formatRelative } from "@/components/mobile/util";
+import { EmptyState, formatRelative, isOverdue } from "@/components/mobile/util";
+import { cn } from "@/lib/utils";
 import { MButton } from "@/components/mobile/primitives";
 import { useStore } from "@/lib/mock/store";
 import type { Stage } from "@/lib/mock/types";
@@ -88,7 +89,9 @@ function OpportunitiesList() {
                     </div>
                     <span className="text-xs text-zinc-600 font-medium">{o.assignedRep}</span>
                   </div>
-                  <span className="text-xs text-zinc-400">{formatRelative(o.actionDate)}</span>
+                  <span className={cn("text-xs font-medium", isOverdue(o.actionDate) && o.stage !== "Handed to CRM" && o.stage !== "Dropped" ? "text-red-600" : "text-zinc-400")}>
+                    {formatRelative(o.actionDate)}
+                  </span>
                 </div>
               </Card>
             ))}

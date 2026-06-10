@@ -4,7 +4,7 @@ import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard, DetailRow } from "@/components/mobile/primitives";
 import { StageBadge, TemperatureBadge } from "@/components/mobile/badges";
-import { formatDate, formatINR, formatRelative } from "@/components/mobile/util";
+import { formatDate, formatINR, isOverdue } from "@/components/mobile/util";
 import { getOpportunity, transitionStage, useStore, visitsForOpportunity } from "@/lib/mock/store";
 import type { Stage } from "@/lib/mock/types";
 
@@ -81,7 +81,7 @@ function OpportunityDetail() {
               <DetailRow label="District" value={opp.district || "—"} />
               <DetailRow label="Sub Department" value={opp.subDepartment || "—"} />
               <DetailRow label="Source" value={opp.source || "—"} />
-              <DetailRow label="Action Date" value={formatDate(opp.actionDate)} />
+              <DetailRow label="Action Date" value={<span className={isOverdue(opp.actionDate) && opp.stage !== "Handed to CRM" && opp.stage !== "Dropped" ? "text-red-600" : undefined}>{formatDate(opp.actionDate)}</span>} />
               <DetailRow label="Created" value={formatDate(opp.createdDate)} />
             </div>
           </SectionCard>
