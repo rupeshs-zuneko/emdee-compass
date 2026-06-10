@@ -16,14 +16,30 @@ export type Outcome =
   | "Tender Indicated"
   | "Follow-up Required";
 
-export type VisitType = "Discovery" | "Demo" | "Negotiation" | "Follow-up" | "Closing";
+export type VisitType =
+  | "Cold Pitch"
+  | "Relationship Visit"
+  | "Demo"
+  | "Technical Discussion"
+  | "Tender Follow-up";
 
 export type InfluenceLevel = "Decision Maker" | "Influencer" | "Gatekeeper" | "User";
+
+export type OfferingType = "Hardware" | "Software" | "Solution" | "Others";
+export type SolutionStatus = "Published" | "Draft";
 
 export interface SolutionRef {
   id: string;
   name: string;
   offeringType: string;
+}
+
+export interface Solution extends SolutionRef {
+  category: string;
+  offeringType: OfferingType;
+  shortDescription: string;
+  talkingPoints: string[];
+  status: SolutionStatus;
 }
 
 export interface ContactRef {
