@@ -43,7 +43,7 @@ export function VisitForm({
       subDepartment: "",
       district: "",
       visitDate: new Date().toISOString(),
-      visitType: "Discovery",
+      visitType: "Cold Pitch" as VisitType,
       outcome: "Neutral",
       opportunityId: initialOpportunityId ?? null,
       nextAction: "",
@@ -116,7 +116,7 @@ export function VisitForm({
         <div className="space-y-3">
           <SectionCard title="Where">
             <div className="space-y-4">
-              <Field label="Government Department" error={errors.department}>
+              <Field label="Govt Department" error={errors.department}>
                 <SelectField value={form.department} onClick={() => setSheet("dept")} placeholder="Select department" error={errors.department} />
               </Field>
               <Field label="Sub Department">
@@ -297,7 +297,7 @@ export function VisitForm({
       </ScreenScroll>
 
       {/* Bottom sheets */}
-      <BottomSheet open={sheet === "dept"} onClose={() => setSheet(null)} title="Government Department">
+      <BottomSheet open={sheet === "dept"} onClose={() => setSheet(null)} title="Govt Department">
         <OptionList options={refData.departments} value={form.department} onChange={(v) => update("department", v)} onClose={() => setSheet(null)} />
       </BottomSheet>
       <BottomSheet open={sheet === "district"} onClose={() => setSheet(null)} title="District">
@@ -305,7 +305,7 @@ export function VisitForm({
       </BottomSheet>
       <BottomSheet open={sheet === "type"} onClose={() => setSheet(null)} title="Visit Type">
         <OptionList
-          options={["Discovery", "Demo", "Negotiation", "Follow-up", "Closing"] as VisitType[]}
+          options={["Cold Pitch", "Relationship Visit", "Demo", "Technical Discussion", "Tender Follow-up"] as VisitType[]}
           value={form.visitType}
           onChange={(v) => update("visitType", v)}
           onClose={() => setSheet(null)}
