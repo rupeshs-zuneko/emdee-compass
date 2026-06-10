@@ -6,6 +6,7 @@ import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard, DetailRow } from "@/components/mobile/primitives";
 import { OutcomeBadge } from "@/components/mobile/badges";
 import { formatDate } from "@/components/mobile/util";
+import { AssistantFAB } from "@/components/mobile/assistant";
 import { getOpportunity, getVisit, useStore } from "@/lib/mock/store";
 
 export const Route = createFileRoute("/_app/visits/$id")({
@@ -188,6 +189,8 @@ function VisitDetail() {
           <img src={lightbox} alt="" className="max-w-full max-h-full object-contain" />
         </div>
       )}
+
+      <AssistantFAB context={{ kind: "visit", id: visit.id }} />
     </>
   );
 }

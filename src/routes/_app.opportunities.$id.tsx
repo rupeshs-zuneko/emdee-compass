@@ -5,6 +5,7 @@ import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard, DetailRow } from "@/components/mobile/primitives";
 import { StageBadge, TemperatureBadge } from "@/components/mobile/badges";
 import { formatDate, formatINR, isOverdue } from "@/components/mobile/util";
+import { AssistantFAB } from "@/components/mobile/assistant";
 import { getOpportunity, transitionStage, useStore, visitsForOpportunity } from "@/lib/mock/store";
 import type { Stage } from "@/lib/mock/types";
 
@@ -157,6 +158,8 @@ function OpportunityDetail() {
           Edit
         </MButton>
       </div>
+
+      <AssistantFAB context={{ kind: "opportunity", id: opp.id }} />
     </>
   );
 }
