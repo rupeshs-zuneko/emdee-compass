@@ -51,3 +51,12 @@ export function formatINR(n: number) {
   if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
   return `₹${n.toLocaleString("en-IN")}`;
 }
+
+export function isOverdue(iso: string) {
+  try {
+    const d = new Date(iso);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return d.getTime() < today.getTime();
+  } catch { return false; }
+}

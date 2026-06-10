@@ -1,5 +1,5 @@
 import { Link, useMatchRoute } from "@tanstack/react-router";
-import { Briefcase, MapPin, User, ArrowLeft } from "lucide-react";
+import { Briefcase, MapPin, User, ArrowLeft, Package } from "lucide-react";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -65,8 +65,9 @@ function BackButton({ to, params }: { to?: string; params?: Record<string, strin
 }
 
 const TABS = [
-  { to: "/opportunities", label: "Opportunities", icon: Briefcase },
+  { to: "/opportunities", label: "Opps", icon: Briefcase },
   { to: "/visits", label: "Visits", icon: MapPin },
+  { to: "/solutions", label: "Solutions", icon: Package },
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
 

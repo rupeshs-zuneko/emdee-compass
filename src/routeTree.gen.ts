@@ -14,9 +14,11 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppVisitsIndexRouteImport } from './routes/_app.visits.index'
+import { Route as AppSolutionsIndexRouteImport } from './routes/_app.solutions.index'
 import { Route as AppOpportunitiesIndexRouteImport } from './routes/_app.opportunities.index'
 import { Route as AppVisitsNewRouteImport } from './routes/_app.visits.new'
 import { Route as AppVisitsIdRouteImport } from './routes/_app.visits.$id'
+import { Route as AppSolutionsIdRouteImport } from './routes/_app.solutions.$id'
 import { Route as AppOpportunitiesNewRouteImport } from './routes/_app.opportunities.new'
 import { Route as AppOpportunitiesIdRouteImport } from './routes/_app.opportunities.$id'
 import { Route as AppVisitsIdEditRouteImport } from './routes/_app.visits.$id.edit'
@@ -46,6 +48,11 @@ const AppVisitsIndexRoute = AppVisitsIndexRouteImport.update({
   path: '/visits/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSolutionsIndexRoute = AppSolutionsIndexRouteImport.update({
+  id: '/solutions/',
+  path: '/solutions/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppOpportunitiesIndexRoute = AppOpportunitiesIndexRouteImport.update({
   id: '/opportunities/',
   path: '/opportunities/',
@@ -59,6 +66,11 @@ const AppVisitsNewRoute = AppVisitsNewRouteImport.update({
 const AppVisitsIdRoute = AppVisitsIdRouteImport.update({
   id: '/visits/$id',
   path: '/visits/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSolutionsIdRoute = AppSolutionsIdRouteImport.update({
+  id: '/solutions/$id',
+  path: '/solutions/$id',
   getParentRoute: () => AppRoute,
 } as any)
 const AppOpportunitiesNewRoute = AppOpportunitiesNewRouteImport.update({
@@ -88,9 +100,11 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AppProfileRoute
   '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/opportunities/new': typeof AppOpportunitiesNewRoute
+  '/solutions/$id': typeof AppSolutionsIdRoute
   '/visits/$id': typeof AppVisitsIdRouteWithChildren
   '/visits/new': typeof AppVisitsNewRoute
   '/opportunities/': typeof AppOpportunitiesIndexRoute
+  '/solutions/': typeof AppSolutionsIndexRoute
   '/visits/': typeof AppVisitsIndexRoute
   '/opportunities/$id/edit': typeof AppOpportunitiesIdEditRoute
   '/visits/$id/edit': typeof AppVisitsIdEditRoute
@@ -101,9 +115,11 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/opportunities/new': typeof AppOpportunitiesNewRoute
+  '/solutions/$id': typeof AppSolutionsIdRoute
   '/visits/$id': typeof AppVisitsIdRouteWithChildren
   '/visits/new': typeof AppVisitsNewRoute
   '/opportunities': typeof AppOpportunitiesIndexRoute
+  '/solutions': typeof AppSolutionsIndexRoute
   '/visits': typeof AppVisitsIndexRoute
   '/opportunities/$id/edit': typeof AppOpportunitiesIdEditRoute
   '/visits/$id/edit': typeof AppVisitsIdEditRoute
@@ -116,9 +132,11 @@ export interface FileRoutesById {
   '/_app/profile': typeof AppProfileRoute
   '/_app/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/_app/opportunities/new': typeof AppOpportunitiesNewRoute
+  '/_app/solutions/$id': typeof AppSolutionsIdRoute
   '/_app/visits/$id': typeof AppVisitsIdRouteWithChildren
   '/_app/visits/new': typeof AppVisitsNewRoute
   '/_app/opportunities/': typeof AppOpportunitiesIndexRoute
+  '/_app/solutions/': typeof AppSolutionsIndexRoute
   '/_app/visits/': typeof AppVisitsIndexRoute
   '/_app/opportunities/$id/edit': typeof AppOpportunitiesIdEditRoute
   '/_app/visits/$id/edit': typeof AppVisitsIdEditRoute
@@ -131,9 +149,11 @@ export interface FileRouteTypes {
     | '/profile'
     | '/opportunities/$id'
     | '/opportunities/new'
+    | '/solutions/$id'
     | '/visits/$id'
     | '/visits/new'
     | '/opportunities/'
+    | '/solutions/'
     | '/visits/'
     | '/opportunities/$id/edit'
     | '/visits/$id/edit'
@@ -144,9 +164,11 @@ export interface FileRouteTypes {
     | '/profile'
     | '/opportunities/$id'
     | '/opportunities/new'
+    | '/solutions/$id'
     | '/visits/$id'
     | '/visits/new'
     | '/opportunities'
+    | '/solutions'
     | '/visits'
     | '/opportunities/$id/edit'
     | '/visits/$id/edit'
@@ -158,9 +180,11 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/opportunities/$id'
     | '/_app/opportunities/new'
+    | '/_app/solutions/$id'
     | '/_app/visits/$id'
     | '/_app/visits/new'
     | '/_app/opportunities/'
+    | '/_app/solutions/'
     | '/_app/visits/'
     | '/_app/opportunities/$id/edit'
     | '/_app/visits/$id/edit'
@@ -209,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppVisitsIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/solutions/': {
+      id: '/_app/solutions/'
+      path: '/solutions'
+      fullPath: '/solutions/'
+      preLoaderRoute: typeof AppSolutionsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/opportunities/': {
       id: '/_app/opportunities/'
       path: '/opportunities'
@@ -228,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/visits/$id'
       fullPath: '/visits/$id'
       preLoaderRoute: typeof AppVisitsIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/solutions/$id': {
+      id: '/_app/solutions/$id'
+      path: '/solutions/$id'
+      fullPath: '/solutions/$id'
+      preLoaderRoute: typeof AppSolutionsIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/opportunities/new': {
@@ -288,9 +326,11 @@ interface AppRouteChildren {
   AppProfileRoute: typeof AppProfileRoute
   AppOpportunitiesIdRoute: typeof AppOpportunitiesIdRouteWithChildren
   AppOpportunitiesNewRoute: typeof AppOpportunitiesNewRoute
+  AppSolutionsIdRoute: typeof AppSolutionsIdRoute
   AppVisitsIdRoute: typeof AppVisitsIdRouteWithChildren
   AppVisitsNewRoute: typeof AppVisitsNewRoute
   AppOpportunitiesIndexRoute: typeof AppOpportunitiesIndexRoute
+  AppSolutionsIndexRoute: typeof AppSolutionsIndexRoute
   AppVisitsIndexRoute: typeof AppVisitsIndexRoute
 }
 
@@ -298,9 +338,11 @@ const AppRouteChildren: AppRouteChildren = {
   AppProfileRoute: AppProfileRoute,
   AppOpportunitiesIdRoute: AppOpportunitiesIdRouteWithChildren,
   AppOpportunitiesNewRoute: AppOpportunitiesNewRoute,
+  AppSolutionsIdRoute: AppSolutionsIdRoute,
   AppVisitsIdRoute: AppVisitsIdRouteWithChildren,
   AppVisitsNewRoute: AppVisitsNewRoute,
   AppOpportunitiesIndexRoute: AppOpportunitiesIndexRoute,
+  AppSolutionsIndexRoute: AppSolutionsIndexRoute,
   AppVisitsIndexRoute: AppVisitsIndexRoute,
 }
 

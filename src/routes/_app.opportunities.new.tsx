@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Lock } from "lucide-react";
 import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard } from "@/components/mobile/primitives";
@@ -8,32 +8,64 @@ import {
   Field, TextInput, TextArea, SelectField, BottomSheet, OptionList, SearchablePicker,
 } from "@/components/mobile/forms";
 import {
-  createOpportunity, getOpportunity, refData, updateOpportunity, useStore,
+  createOpportunity, getOpportunity, getVisit, refData, updateOpportunity, useStore,
 } from "@/lib/mock/store";
 import type { Opportunity, SolutionRef, Temperature } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_app/opportunities/new")({
-  component: () => <OpportunityForm mode="new" />,
+  validateSearch: (s: Record<string, unknown>) => ({
+    fromVisitId: typeof s.fromVisitId === "string" ? s.fromVisitId : undefined,
+  }),
+  component: NewOpportunity,
 });
 
-export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: string }) {
+function NewOpportunity() {
+  useStore();
+  const { fromVisitId } = Route.useSearch();
+  const visit = fromVisitId ? getVisit(fromVisitId) : null;
+  return <OpportunityForm mode="new" prefillFromVisit={visit} />;
+}
+
+export function OpportunityForm({
+  mode,
+  id,
+  prefillFromVisit,
+}: {
+  mode: "new" | "edit";
+  id?: string;
+  prefillFromVisit?: ReturnType<typeof getVisit>;
+}) {
   useStore();
   const navigate = useNavigate();
   const existing = id ? getOpportunity(id) : null;
+  const lockedSolutionIds = prefillFromVisit ? new Set(prefillFromVisit.solutions.map((s) => s.id)) : new Set<string>();
 
   const [form, setForm] = useState<Partial<Opportunity>>(
-    existing || {
-      title: "",
-      department: "",
-      subDepartment: "",
-      district: "",
-      temperature: "Warm",
-      source: "",
-      actionDate: new Date().toISOString().slice(0, 10),
-      departmentBudget: 0,
-      notes: "",
-      solutions: [],
-    },
+    existing || (prefillFromVisit
+      ? {
+          title: "",
+          department: prefillFromVisit.department,
+          subDepartment: prefillFromVisit.subDepartment,
+          district: prefillFromVisit.district,
+          temperature: "Warm",
+          source: "Existing Account",
+          actionDate: new Date().toISOString().slice(0, 10),
+          departmentBudget: 0,
+          notes: `Created from visit on ${new Date(prefillFromVisit.visitDate).toLocaleDateString("en-IN")}.\n\n${prefillFromVisit.discussionNotes}`,
+          solutions: prefillFromVisit.solutions,
+        }
+      : {
+          title: "",
+          department: "",
+          subDepartment: "",
+          district: "",
+          temperature: "Warm",
+          source: "",
+          actionDate: new Date().toISOString().slice(0, 10),
+          departmentBudget: 0,
+          notes: "",
+          solutions: [],
+        }),
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sheet, setSheet] = useState<null | "dept" | "subdept" | "district" | "temperature" | "source" | "solution">(null);
@@ -62,6 +94,7 @@ export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: strin
   }
 
   function removeSolution(sid: string) {
+    if (lockedSolutionIds.has(sid)) return;
     setForm((f) => ({ ...f, solutions: (f.solutions || []).filter((s) => s.id !== sid) }));
   }
 
@@ -78,17 +111,23 @@ export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: strin
       />
       <ScreenScroll className="px-4 pb-10">
         <div className="space-y-3">
+          {prefillFromVisit && (
+            <div className="bg-amber-50 ring-1 ring-amber-200 rounded-xl p-3 text-xs text-amber-800 flex items-start gap-2">
+              <Lock className="size-3.5 mt-0.5 shrink-0" />
+              <span>Pre-filled from visit. Solutions are locked from the visit.</span>
+            </div>
+          )}
           <SectionCard title="Basics">
             <div className="space-y-4">
               <Field label="Title" error={errors.title}>
                 <TextInput
                   value={form.title || ""}
                   onChange={(e) => update("title", e.target.value)}
-                  placeholder="e.g. Cloud Infrastructure Renewal"
+                  placeholder="e.g. City CCTV Upgrade"
                   error={errors.title}
                 />
               </Field>
-              <Field label="Government Department" error={errors.department}>
+              <Field label="Govt Department" error={errors.department}>
                 <SelectField
                   value={form.department}
                   placeholder="Select department"
@@ -100,7 +139,7 @@ export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: strin
                 <TextInput
                   value={form.subDepartment || ""}
                   onChange={(e) => update("subDepartment", e.target.value)}
-                  placeholder="e.g. IT Wing"
+                  placeholder="e.g. Command & Control Centre"
                 />
               </Field>
               <Field label="District" error={errors.district}>
@@ -166,17 +205,26 @@ export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: strin
               <p className="text-sm text-zinc-400 py-2">No solutions added.</p>
             ) : (
               <div className="space-y-2">
-                {(form.solutions || []).map((s) => (
-                  <div key={s.id} className="flex items-center justify-between py-2 border-b border-zinc-100 last:border-b-0">
-                    <div>
-                      <p className="text-sm text-ink font-medium">{s.name}</p>
-                      <p className="text-xs text-zinc-500">{s.offeringType}</p>
+                {(form.solutions || []).map((s) => {
+                  const locked = lockedSolutionIds.has(s.id);
+                  return (
+                    <div key={s.id} className="flex items-center justify-between py-2 border-b border-zinc-100 last:border-b-0">
+                      <div>
+                        <p className="text-sm text-ink font-medium">{s.name}</p>
+                        <p className="text-xs text-zinc-500">{s.offeringType}</p>
+                      </div>
+                      {locked ? (
+                        <span className="text-[10px] font-semibold uppercase tracking-tight text-amber-700 inline-flex items-center gap-1">
+                          <Lock className="size-3" /> Locked
+                        </span>
+                      ) : (
+                        <button onClick={() => removeSolution(s.id)} className="size-8 rounded-full hover:bg-zinc-100 flex items-center justify-center">
+                          <X className="size-4 text-zinc-500" />
+                        </button>
+                      )}
                     </div>
-                    <button onClick={() => removeSolution(s.id)} className="size-8 rounded-full hover:bg-zinc-100 flex items-center justify-center">
-                      <X className="size-4 text-zinc-500" />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </SectionCard>
@@ -200,7 +248,7 @@ export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: strin
         </div>
       </ScreenScroll>
 
-      <BottomSheet open={sheet === "dept"} onClose={() => setSheet(null)} title="Government Department">
+      <BottomSheet open={sheet === "dept"} onClose={() => setSheet(null)} title="Govt Department">
         <OptionList
           options={refData.departments}
           value={form.department}
@@ -226,9 +274,10 @@ export function OpportunityForm({ mode, id }: { mode: "new" | "edit"; id?: strin
         onSelect={(item) => {
           const s = refData.solutions.find((x) => x.id === item.id)!;
           setForm((f) => {
-            const existing = (f.solutions || []).find((x) => x.id === s.id);
-            if (existing) return f;
-            return { ...f, solutions: [...(f.solutions || []), s as SolutionRef] };
+            const exists = (f.solutions || []).find((x) => x.id === s.id);
+            if (exists) return f;
+            const ref: SolutionRef = { id: s.id, name: s.name, offeringType: s.offeringType };
+            return { ...f, solutions: [...(f.solutions || []), ref] };
           });
         }}
       />

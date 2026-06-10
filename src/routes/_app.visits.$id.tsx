@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { MapPin, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { MapPin, ExternalLink, X } from "lucide-react";
 import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard, DetailRow } from "@/components/mobile/primitives";
@@ -18,6 +19,7 @@ function VisitDetail() {
   const visit = getVisit(id);
   if (!visit) throw notFound();
   const opp = visit.opportunityId ? getOpportunity(visit.opportunityId) : null;
+  const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
     <>
@@ -134,9 +136,14 @@ function VisitDetail() {
             <SectionCard title="Photos">
               <div className="grid grid-cols-3 gap-2">
                 {visit.photos.map((src, i) => (
-                  <a key={i} href={src} target="_blank" rel="noreferrer" className="aspect-square rounded-xl overflow-hidden bg-zinc-100 ring-1 ring-black/5">
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setLightbox(src)}
+                    className="aspect-square rounded-xl overflow-hidden bg-zinc-100 ring-1 ring-black/5 active:scale-95 transition-transform"
+                  >
                     <img src={src} alt="" className="w-full h-full object-cover" />
-                  </a>
+                  </button>
                 ))}
               </div>
             </SectionCard>
@@ -155,7 +162,7 @@ function VisitDetail() {
           <MButton
             variant="secondary"
             fullWidth
-            onClick={() => navigate({ to: "/opportunities/new" })}
+            onClick={() => navigate({ to: "/opportunities/new", search: { fromVisitId: visit.id } as never })}
           >
             Create Opportunity
           </MButton>
@@ -164,6 +171,23 @@ function VisitDetail() {
           Edit
         </MButton>
       </div>
+
+      {lightbox && (
+        <div
+          className="absolute inset-0 z-50 bg-black/95 flex items-center justify-center"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightbox(null)}
+            className="absolute top-12 right-5 size-10 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-white"
+            aria-label="Close"
+          >
+            <X className="size-5" />
+          </button>
+          <img src={lightbox} alt="" className="max-w-full max-h-full object-contain" />
+        </div>
+      )}
     </>
   );
 }
