@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { MapPin, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { MapPin, ExternalLink, X } from "lucide-react";
 import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard, DetailRow } from "@/components/mobile/primitives";
