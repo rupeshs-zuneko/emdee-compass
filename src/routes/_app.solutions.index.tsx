@@ -5,6 +5,7 @@ import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, Chip } from "@/components/mobile/primitives";
 import { EmptyState } from "@/components/mobile/util";
+import { AssistantFAB } from "@/components/mobile/assistant";
 import { listPublishedSolutions } from "@/lib/mock/store";
 import type { OfferingType } from "@/lib/mock/types";
 
@@ -74,6 +75,7 @@ function SolutionsList() {
           </div>
         )}
       </ScreenScroll>
+      <AssistantFAB />
     </>
   );
 }
