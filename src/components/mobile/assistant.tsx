@@ -31,7 +31,7 @@ export function AssistantFAB({ context = { kind: "none" } as Context }: { contex
         type="button"
         onClick={() => setOpen(true)}
         aria-label="EMDEE's Assistant"
-        className="absolute bottom-[88px] left-5 size-12 rounded-full bg-gradient-to-br from-orange-500 to-pink-600 text-white shadow-xl flex items-center justify-center ring-4 ring-white active:scale-95 transition-transform z-30"
+        className="absolute bottom-[88px] right-5 size-12 rounded-full bg-gradient-to-br from-orange-500 to-pink-600 text-white shadow-xl flex items-center justify-center ring-4 ring-white active:scale-95 transition-transform z-30"
       >
         <Sparkles className="size-5" strokeWidth={2.2} />
       </button>

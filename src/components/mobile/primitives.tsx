@@ -95,7 +95,7 @@ export function FAB({ onClick, label = "Create" }: { onClick: () => void; label?
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="absolute bottom-[88px] right-5 h-14 px-5 bg-zinc-950 text-white rounded-full shadow-xl flex items-center justify-center gap-2 ring-4 ring-white active:scale-95 transition-transform"
+      className="absolute bottom-[88px] left-5 h-14 px-5 bg-zinc-950 text-white rounded-full shadow-xl flex items-center justify-center gap-2 ring-4 ring-white active:scale-95 transition-transform"
     >
       <Plus className="size-5" strokeWidth={2.4} />
       <span className="text-sm font-semibold">{label}</span>
