@@ -6,6 +6,7 @@ import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, Chip, FAB, Skeleton } from "@/components/mobile/primitives";
 import { StageBadge, TemperatureBadge } from "@/components/mobile/badges";
 import { EmptyState, formatRelative, isOverdue } from "@/components/mobile/util";
+import { ScrollableChips } from "@/components/mobile/scrollable-chips";
 import { cn } from "@/lib/utils";
 import { MButton } from "@/components/mobile/primitives";
 import { useStore } from "@/lib/mock/store";
@@ -50,11 +51,11 @@ function OpportunitiesList() {
           />
         </div>
       </div>
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 pb-3 shrink-0">
+      <ScrollableChips>
         {STAGES.map((s) => (
           <Chip key={s} active={stage === s} onClick={() => setStage(s)}>{s}</Chip>
         ))}
-      </div>
+      </ScrollableChips>
       <ScreenScroll className="px-4 pb-32">
         {loading ? (
           <div className="space-y-3">

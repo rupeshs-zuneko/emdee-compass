@@ -5,6 +5,7 @@ import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, Chip } from "@/components/mobile/primitives";
 import { EmptyState } from "@/components/mobile/util";
+import { ScrollableChips } from "@/components/mobile/scrollable-chips";
 import { AssistantFAB } from "@/components/mobile/assistant";
 import { listPublishedSolutions } from "@/lib/mock/store";
 import type { OfferingType } from "@/lib/mock/types";
@@ -44,11 +45,11 @@ function SolutionsList() {
           />
         </div>
       </div>
-      <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 pb-3 shrink-0">
+      <ScrollableChips>
         {TYPES.map((t) => (
           <Chip key={t} active={type === t} onClick={() => setType(t)}>{t}</Chip>
         ))}
-      </div>
+      </ScrollableChips>
       <ScreenScroll className="px-4 pb-32">
         {filtered.length === 0 ? (
           <EmptyState title="No solutions" description="Try a different filter or search." />
