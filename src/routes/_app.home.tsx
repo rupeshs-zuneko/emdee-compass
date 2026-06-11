@@ -131,6 +131,45 @@ function HomeScreen() {
           />
         </div>
 
+        {/* My Targets + Calendar entry */}
+        <div className="grid grid-cols-2 gap-2 mb-5">
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/targets" })}
+            className="bg-card rounded-2xl ring-1 ring-black/5 p-4 text-left active:scale-[0.98] transition-transform"
+          >
+            <div className="flex items-center justify-between">
+              <div className="size-8 rounded-lg bg-orange-50 text-orange-700 ring-1 ring-orange-100 flex items-center justify-center">
+                <Target className="size-4" />
+              </div>
+              <ChevronRight className="size-4 text-zinc-400" />
+            </div>
+            <p className="text-[10px] mt-3 font-semibold uppercase tracking-tight text-zinc-500">My Targets</p>
+            <p className="text-sm font-medium text-ink mt-0.5">
+              {targetSummary.visited}/{targetSummary.total} engaged
+            </p>
+            <p className="text-[11px] text-zinc-500 mt-0.5">{targetSummary.opps} with open opps</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/calendar" })}
+            className="bg-card rounded-2xl ring-1 ring-black/5 p-4 text-left active:scale-[0.98] transition-transform"
+          >
+            <div className="flex items-center justify-between">
+              <div className="size-8 rounded-lg bg-zinc-100 text-zinc-700 flex items-center justify-center">
+                <CalendarDays className="size-4" />
+              </div>
+              <ChevronRight className="size-4 text-zinc-400" />
+            </div>
+            <p className="text-[10px] mt-3 font-semibold uppercase tracking-tight text-zinc-500">Calendar</p>
+            <p className="text-sm font-medium text-ink mt-0.5">
+              {now.toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+            </p>
+            <p className="text-[11px] text-zinc-500 mt-0.5">View follow-ups by day</p>
+          </button>
+        </div>
+
         {/* Needs Attention */}
         <section className="mb-5">
           <div className="flex items-center gap-2 px-1 mb-2">
