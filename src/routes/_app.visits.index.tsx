@@ -5,11 +5,12 @@ import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, Chip, FAB } from "@/components/mobile/primitives";
 import { OutcomeBadge } from "@/components/mobile/badges";
 import { EmptyState, formatDate, formatRelative } from "@/components/mobile/util";
+import { ScrollableChips } from "@/components/mobile/scrollable-chips";
 import { MButton } from "@/components/mobile/primitives";
 import { useStore } from "@/lib/mock/store";
 import type { Outcome } from "@/lib/mock/types";
 
-const DATE_CHIPS = ["All", "This Week", "This Month"] as const;
+const DATE_CHIPS = ["All", "Today", "This Week", "This Month"] as const;
 const OUTCOMES: ("All" | Outcome)[] = [
   "All", "Positive", "Neutral", "Negative", "Tender Indicated", "Follow-up Required",
 ];
@@ -26,12 +27,14 @@ function VisitsList() {
   const [outcome, setOutcome] = useState<"All" | Outcome>("All");
 
   const filtered = useMemo(() => {
-    const now = Date.now();
+    const now = new Date();
+    const today = now.toDateString();
     return visits.filter((v) => {
-      const t = new Date(v.visitDate).getTime();
-      const days = (now - t) / (1000 * 60 * 60 * 24);
+      const t = new Date(v.visitDate);
+      const days = (now.getTime() - t.getTime()) / (1000 * 60 * 60 * 24);
       const dateOk =
         dateChip === "All" ? true :
+        dateChip === "Today" ? t.toDateString() === today :
         dateChip === "This Week" ? days < 7 :
         days < 31;
       const outcomeOk = outcome === "All" || v.outcome === outcome;
@@ -42,13 +45,13 @@ function VisitsList() {
   return (
     <>
       <TopHeader title="Visits" subtitle={`${visits.length} field visits logged`} />
-      <div className="px-5 pb-2 shrink-0 space-y-2">
-        <div className="flex gap-2 overflow-x-auto no-scrollbar">
+      <div className="shrink-0 space-y-1">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar px-5 pb-2">
           {DATE_CHIPS.map((c) => <Chip key={c} active={dateChip === c} onClick={() => setDateChip(c)}>{c}</Chip>)}
         </div>
-        <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        <ScrollableChips>
           {OUTCOMES.map((o) => <Chip key={o} active={outcome === o} onClick={() => setOutcome(o)}>{o}</Chip>)}
-        </div>
+        </ScrollableChips>
       </div>
       <ScreenScroll className="px-4 pt-3 pb-32">
         {filtered.length === 0 ? (
