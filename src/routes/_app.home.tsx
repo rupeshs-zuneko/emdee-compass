@@ -90,16 +90,22 @@ function HomeScreen() {
 
   return (
     <>
-      <header className="pt-12 px-5 pb-3 bg-surface shrink-0">
+      <header
+        className="pt-12 px-5 pb-3 bg-surface shrink-0"
+        style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
+      >
         <p className="text-xs text-zinc-500 font-medium">
           {now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}
         </p>
-        <h1 className="font-serif text-[26px] leading-tight text-ink mt-1">
-          {greet}, {refData.currentUser.name.split(" ")[0]} {refData.currentUser.name.split(" ").slice(1).join(" ")}
+        <h1 className="text-[26px] leading-tight text-ink mt-1 font-semibold tracking-tight">
+          {greet}, {refData.currentUser.name.split(" ")[0]}
         </h1>
       </header>
 
-      <ScreenScroll className="px-4 pb-32">
+      <ScreenScroll
+        className="px-4 pb-32"
+        style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
+      >
         {/* Quick stats */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           <StatCard
