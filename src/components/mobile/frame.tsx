@@ -18,9 +18,19 @@ export function MobileFrame({ children }: { children: ReactNode }) {
   );
 }
 
-export function ScreenScroll({ children, className }: { children: ReactNode; className?: string }) {
+export function ScreenScroll({
+  children,
+  className,
+  style,
+}: {
+  children: ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
-    <main className={cn("flex-1 overflow-y-auto overflow-x-hidden", className)}>{children}</main>
+    <main className={cn("flex-1 overflow-y-auto overflow-x-hidden", className)} style={style}>
+      {children}
+    </main>
   );
 }
 

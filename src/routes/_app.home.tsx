@@ -1,6 +1,9 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
-import { Briefcase, Flame, MapPin, Plus, AlertCircle, ChevronRight, CalendarClock } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo } from "react";
+import {
+  Briefcase, Flame, MapPin, Plus, AlertCircle, ChevronRight,
+  CalendarClock, Target, CalendarDays,
+} from "lucide-react";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, MButton } from "@/components/mobile/primitives";
 import { formatDate, formatRelative, isOverdue } from "@/components/mobile/util";
@@ -17,8 +20,28 @@ function HomeScreen() {
   const { opportunities, visits } = useStore();
   const navigate = useNavigate();
 
+  // Load Poppins on this screen only (trial)
+  useEffect(() => {
+    const id = "poppins-font-link";
+    if (!document.getElementById(id)) {
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap";
+      document.head.appendChild(link);
+    }
+  }, []);
+
   const now = new Date();
   const greet = now.getHours() < 12 ? "Good morning" : now.getHours() < 17 ? "Good afternoon" : "Good evening";
+
+  const targetSummary = useMemo(() => {
+    const visited = refData.targets.filter((t) => visits.some((v) => v.department === t.name)).length;
+    const opps = refData.targets.filter((t) =>
+      opportunities.some((o) => o.department === t.name && o.stage !== "Dropped"),
+    ).length;
+    return { total: refData.targets.length, visited, opps };
+  }, [opportunities, visits]);
 
   const openOpps = useMemo(
     () => opportunities.filter((o) => o.stage !== "Handed to CRM" && o.stage !== "Dropped"),
@@ -67,16 +90,22 @@ function HomeScreen() {
 
   return (
     <>
-      <header className="pt-12 px-5 pb-3 bg-surface shrink-0">
+      <header
+        className="pt-12 px-5 pb-3 bg-surface shrink-0"
+        style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
+      >
         <p className="text-xs text-zinc-500 font-medium">
           {now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}
         </p>
-        <h1 className="font-serif text-[26px] leading-tight text-ink mt-1">
-          {greet}, {refData.currentUser.name.split(" ")[0]} {refData.currentUser.name.split(" ").slice(1).join(" ")}
+        <h1 className="text-[26px] leading-tight text-ink mt-1 font-semibold tracking-tight">
+          {greet}, {refData.currentUser.name.split(" ")[0]}
         </h1>
       </header>
 
-      <ScreenScroll className="px-4 pb-32">
+      <ScreenScroll
+        className="px-4 pb-32"
+        style={{ fontFamily: "'Poppins', ui-sans-serif, system-ui, sans-serif" }}
+      >
         {/* Quick stats */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           <StatCard
@@ -100,6 +129,45 @@ function HomeScreen() {
             icon={<MapPin className="size-4" />}
             onClick={() => navigate({ to: "/visits" })}
           />
+        </div>
+
+        {/* My Targets + Calendar entry */}
+        <div className="grid grid-cols-2 gap-2 mb-5">
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/targets" })}
+            className="bg-card rounded-2xl ring-1 ring-black/5 p-4 text-left active:scale-[0.98] transition-transform"
+          >
+            <div className="flex items-center justify-between">
+              <div className="size-8 rounded-lg bg-orange-50 text-orange-700 ring-1 ring-orange-100 flex items-center justify-center">
+                <Target className="size-4" />
+              </div>
+              <ChevronRight className="size-4 text-zinc-400" />
+            </div>
+            <p className="text-[10px] mt-3 font-semibold uppercase tracking-tight text-zinc-500">My Targets</p>
+            <p className="text-sm font-medium text-ink mt-0.5">
+              {targetSummary.visited}/{targetSummary.total} engaged
+            </p>
+            <p className="text-[11px] text-zinc-500 mt-0.5">{targetSummary.opps} with open opps</p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/calendar" })}
+            className="bg-card rounded-2xl ring-1 ring-black/5 p-4 text-left active:scale-[0.98] transition-transform"
+          >
+            <div className="flex items-center justify-between">
+              <div className="size-8 rounded-lg bg-zinc-100 text-zinc-700 flex items-center justify-center">
+                <CalendarDays className="size-4" />
+              </div>
+              <ChevronRight className="size-4 text-zinc-400" />
+            </div>
+            <p className="text-[10px] mt-3 font-semibold uppercase tracking-tight text-zinc-500">Calendar</p>
+            <p className="text-sm font-medium text-ink mt-0.5">
+              {now.toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+            </p>
+            <p className="text-[11px] text-zinc-500 mt-0.5">View follow-ups by day</p>
+          </button>
         </div>
 
         {/* Needs Attention */}

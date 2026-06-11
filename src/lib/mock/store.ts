@@ -520,6 +520,16 @@ export const refData = {
   districts: DISTRICTS,
   sources: SOURCES,
   currentUser: REP,
+  targets: [
+    { name: "Kolkata Police", district: "Kolkata", priority: "High" as const },
+    { name: "WB Education Department", district: "Kolkata", priority: "High" as const },
+    { name: "Hooghly District Administration", district: "Hooghly", priority: "High" as const },
+    { name: "Howrah Municipal Corporation", district: "Howrah", priority: "Medium" as const },
+    { name: "WB Health Department", district: "Howrah", priority: "Medium" as const },
+    { name: "WB Transport Department", district: "Kolkata", priority: "Medium" as const },
+    { name: "Bidhannagar Municipal Corporation", district: "North 24 Parganas", priority: "Low" as const },
+    { name: "WB Tourism Department", district: "Kolkata", priority: "Low" as const },
+  ],
 };
 
 // --- auth ---

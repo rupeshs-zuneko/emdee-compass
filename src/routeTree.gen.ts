@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTargetsRouteImport } from './routes/_app.targets'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
+import { Route as AppCalendarRouteImport } from './routes/_app.calendar'
 import { Route as AppVisitsIndexRouteImport } from './routes/_app.visits.index'
 import { Route as AppSolutionsIndexRouteImport } from './routes/_app.solutions.index'
 import { Route as AppOpportunitiesIndexRouteImport } from './routes/_app.opportunities.index'
@@ -39,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTargetsRoute = AppTargetsRouteImport.update({
+  id: '/targets',
+  path: '/targets',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -47,6 +54,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
 const AppHomeRoute = AppHomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
   getParentRoute: () => AppRoute,
 } as any)
 const AppVisitsIndexRoute = AppVisitsIndexRouteImport.update({
@@ -103,8 +115,10 @@ const AppOpportunitiesIdEditRoute = AppOpportunitiesIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/calendar': typeof AppCalendarRoute
   '/home': typeof AppHomeRoute
   '/profile': typeof AppProfileRoute
+  '/targets': typeof AppTargetsRoute
   '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/opportunities/new': typeof AppOpportunitiesNewRoute
   '/solutions/$id': typeof AppSolutionsIdRoute
@@ -119,8 +133,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/calendar': typeof AppCalendarRoute
   '/home': typeof AppHomeRoute
   '/profile': typeof AppProfileRoute
+  '/targets': typeof AppTargetsRoute
   '/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/opportunities/new': typeof AppOpportunitiesNewRoute
   '/solutions/$id': typeof AppSolutionsIdRoute
@@ -137,8 +153,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/_app/calendar': typeof AppCalendarRoute
   '/_app/home': typeof AppHomeRoute
   '/_app/profile': typeof AppProfileRoute
+  '/_app/targets': typeof AppTargetsRoute
   '/_app/opportunities/$id': typeof AppOpportunitiesIdRouteWithChildren
   '/_app/opportunities/new': typeof AppOpportunitiesNewRoute
   '/_app/solutions/$id': typeof AppSolutionsIdRoute
@@ -155,8 +173,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/calendar'
     | '/home'
     | '/profile'
+    | '/targets'
     | '/opportunities/$id'
     | '/opportunities/new'
     | '/solutions/$id'
@@ -171,8 +191,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/calendar'
     | '/home'
     | '/profile'
+    | '/targets'
     | '/opportunities/$id'
     | '/opportunities/new'
     | '/solutions/$id'
@@ -188,8 +210,10 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/login'
+    | '/_app/calendar'
     | '/_app/home'
     | '/_app/profile'
+    | '/_app/targets'
     | '/_app/opportunities/$id'
     | '/_app/opportunities/new'
     | '/_app/solutions/$id'
@@ -231,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/targets': {
+      id: '/_app/targets'
+      path: '/targets'
+      fullPath: '/targets'
+      preLoaderRoute: typeof AppTargetsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/profile': {
       id: '/_app/profile'
       path: '/profile'
@@ -243,6 +274,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof AppHomeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/calendar': {
+      id: '/_app/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/visits/': {
@@ -342,8 +380,10 @@ const AppVisitsIdRouteWithChildren = AppVisitsIdRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppCalendarRoute: typeof AppCalendarRoute
   AppHomeRoute: typeof AppHomeRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppTargetsRoute: typeof AppTargetsRoute
   AppOpportunitiesIdRoute: typeof AppOpportunitiesIdRouteWithChildren
   AppOpportunitiesNewRoute: typeof AppOpportunitiesNewRoute
   AppSolutionsIdRoute: typeof AppSolutionsIdRoute
@@ -355,8 +395,10 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCalendarRoute: AppCalendarRoute,
   AppHomeRoute: AppHomeRoute,
   AppProfileRoute: AppProfileRoute,
+  AppTargetsRoute: AppTargetsRoute,
   AppOpportunitiesIdRoute: AppOpportunitiesIdRouteWithChildren,
   AppOpportunitiesNewRoute: AppOpportunitiesNewRoute,
   AppSolutionsIdRoute: AppSolutionsIdRoute,
