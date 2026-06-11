@@ -1,6 +1,9 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
-import { Briefcase, Flame, MapPin, Plus, AlertCircle, ChevronRight, CalendarClock } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo } from "react";
+import {
+  Briefcase, Flame, MapPin, Plus, AlertCircle, ChevronRight,
+  CalendarClock, Target, CalendarDays,
+} from "lucide-react";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { Card, MButton } from "@/components/mobile/primitives";
 import { formatDate, formatRelative, isOverdue } from "@/components/mobile/util";
@@ -17,8 +20,28 @@ function HomeScreen() {
   const { opportunities, visits } = useStore();
   const navigate = useNavigate();
 
+  // Load Poppins on this screen only (trial)
+  useEffect(() => {
+    const id = "poppins-font-link";
+    if (!document.getElementById(id)) {
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap";
+      document.head.appendChild(link);
+    }
+  }, []);
+
   const now = new Date();
   const greet = now.getHours() < 12 ? "Good morning" : now.getHours() < 17 ? "Good afternoon" : "Good evening";
+
+  const targetSummary = useMemo(() => {
+    const visited = refData.targets.filter((t) => visits.some((v) => v.department === t.name)).length;
+    const opps = refData.targets.filter((t) =>
+      opportunities.some((o) => o.department === t.name && o.stage !== "Dropped"),
+    ).length;
+    return { total: refData.targets.length, visited, opps };
+  }, [opportunities, visits]);
 
   const openOpps = useMemo(
     () => opportunities.filter((o) => o.stage !== "Handed to CRM" && o.stage !== "Dropped"),
