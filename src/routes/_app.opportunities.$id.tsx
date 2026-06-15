@@ -4,6 +4,7 @@ import { TopHeader } from "@/components/mobile/nav";
 import { ScreenScroll } from "@/components/mobile/frame";
 import { MButton, SectionCard, DetailRow } from "@/components/mobile/primitives";
 import { StageBadge, TemperatureBadge } from "@/components/mobile/badges";
+import { StageFlow } from "@/components/mobile/stage-flow";
 import { formatDate, formatINR, isOverdue } from "@/components/mobile/util";
 import { AssistantFAB } from "@/components/mobile/assistant";
 import { getOpportunity, transitionStage, useStore, visitsForOpportunity } from "@/lib/mock/store";
@@ -55,6 +56,9 @@ function OpportunityDetail() {
               </div>
             </div>
           </div>
+
+          {/* Pipeline flow visualization */}
+          <StageFlow stage={opp.stage} />
 
           {/* Workflow actions */}
           {opp.stage !== "Dropped" && opp.stage !== "Handed to CRM" && (
